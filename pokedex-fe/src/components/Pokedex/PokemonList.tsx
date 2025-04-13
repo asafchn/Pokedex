@@ -38,6 +38,7 @@ export default function PokemonList() {
       fetchPage={fetchPage}
       NoDataComponent={NoPokemonFound}
       getInitialData={getInitialData}
+      width="80%"
       localStorageKey={pokemonLocalStorageKey}
       filters={filters}
       resetFilters={resetFilters}

@@ -8,6 +8,7 @@ import { VirtualScroller } from "./VirtualScroller";
 type GenericVirtualListProps<TYPE, FILTERS> = {
   localStorageKey?: string;
   pageSize: number;
+  width: string;
   renderItem: (item: TYPE | undefined, cardHeight: number) => JSX.Element;
   fetchPage: (pageIndex: number) => Promise<PaginatedResponse<TYPE>>;
   getInitialData: () => {
@@ -44,6 +45,7 @@ export function GenericVirtualList<TYPE, FILTERS>({
   filters,
   resetFilters,
   NoDataComponent,
+  width,
   calcWrapperHeight,
   headerHeight = 64,
   baseItemVisualizedOnScreen = 5,
@@ -117,7 +119,7 @@ export function GenericVirtualList<TYPE, FILTERS>({
     <Stack height="100%">
       <VirtualScroller<TYPE>
         ref={parentRef}
-        width="80%"
+        width={width}
         measurments={measurments}
         rowVirtualizer={rowVirtualizer}
         getItem={getItem}
