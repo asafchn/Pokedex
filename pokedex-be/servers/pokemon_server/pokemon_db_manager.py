@@ -43,17 +43,17 @@ class PokemonDBManager(AbstractDBManager):
     ):
         """Since PokemonDBManager uses a static dataset, we can simulate pagination."""
         self.populateData()
-        # since we are using search index, our fuzzy search may return duplications. set will make sure every result is unique
-        results = set()
+        results = []
 
-        # Apply fuzzy searching
         if search:
             search = search.lower()
-            results = [
+            fuzzy_results = [
                 pokemon
                 for search_index, pokemon in self._search_index
                 if fuzz.partial_ratio(search, search_index) > 80
             ]
+            # removing fuzzy search duplications
+            results = {pokemon["number"]: pokemon for pokemon in fuzzy_results}.values()
         else:
             results = self._pokemon_data
 
@@ -86,7 +86,9 @@ class PokemonDBManager(AbstractDBManager):
             result["captured"] = self._is_captured_state.get(result["name"], False)
 
         # Return page
+
         return {
+            # since we are using search index, our fuzzy search may return duplications. set will make sure every result is unique
             "data": results,
             "page": page,
             "page_size": page_size,

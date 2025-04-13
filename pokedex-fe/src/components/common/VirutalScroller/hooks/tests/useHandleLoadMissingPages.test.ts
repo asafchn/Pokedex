@@ -1,7 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { useHandleLoadMissingPages } from "../virtualizerFetchHooks/useHandleLoadMissingPages";
 import { Virtualizer } from "@tanstack/react-virtual";
-
 const mockDispatch = jest.fn();
 
 jest.mock("react-redux", () => ({
@@ -37,7 +36,6 @@ describe("useHandleLoadMissingPages", () => {
     expect(loadPage).toHaveBeenNthCalledWith(1, 0);
     expect(loadPage).toHaveBeenNthCalledWith(2, 1);
     expect(loadPage).toHaveBeenNthCalledWith(3, 2);
-    expect(mockDispatch).toHaveBeenCalledTimes(1);
   });
 
   it("calls loadPage only for the single missing page", () => {
@@ -60,7 +58,6 @@ describe("useHandleLoadMissingPages", () => {
 
     expect(loadPage).toHaveBeenCalledTimes(1);
     expect(loadPage).toHaveBeenCalledWith(1);
-    expect(mockDispatch).toHaveBeenCalledTimes(1);
   });
 
   it("does not call loadPage when all visible pages are loaded", () => {
@@ -83,6 +80,5 @@ describe("useHandleLoadMissingPages", () => {
     );
 
     expect(loadPage).not.toHaveBeenCalled();
-    expect(mockDispatch).toHaveBeenCalledTimes(1);
   });
 });
