@@ -41,11 +41,9 @@ class TestPokemonDBManager(unittest.TestCase):
 
     @patch("servers.pokemon_server.utils.getImagePath")
     def test_get_page_with_search_and_filter(self, mock_get_image_path):
-
         url_lambda = (
             lambda name: f"https://img.pokemondb.net/sprites/home/normal/{name.lower()}.png"
         )
-
         mock_get_image_path.side_effect = url_lambda
 
         result = self.db.get_page(
@@ -54,12 +52,15 @@ class TestPokemonDBManager(unittest.TestCase):
 
         self.assertEqual(result["total"], 1)
         self.assertEqual(len(result["data"]), 1)
-        self.assertEqual(result["data"][0]["name"], "Pikachu")
+
+        pokemon = result["data"][0]
+        self.assertEqual(pokemon["name"], "Pikachu")
         self.assertEqual(
-            result["data"][0]["image_path"],
-            ("https://img.pokemondb.net/sprites/home/normal/pikachu.png",),
+            pokemon["image_path"],
+            ("https://img.pokemondb.net/sprites/home/normal/pikachu.png",),  # <- tuple
         )
-        self.assertTrue(result["data"][0]["captured"])
+
+        self.assertTrue(pokemon["captured"])
 
     @patch("servers.pokemon_server.utils.getImagePath")
     def test_get_page_with_sort_desc(self, mock_get_image_path):
@@ -70,7 +71,7 @@ class TestPokemonDBManager(unittest.TestCase):
         )
 
         numbers = [pokemon["number"] for pokemon in result["data"]]
-        self.assertEqual(numbers, [25, 7, 6])
+        self.assertEqual(numbers, [25, 7, 6])  # descending by number
 
     @patch("servers.pokemon_server.utils.getImagePath")
     def test_get_page_with_pagination(self, mock_get_image_path):
@@ -84,6 +85,9 @@ class TestPokemonDBManager(unittest.TestCase):
         self.assertEqual(result["page_size"], 2)
         self.assertEqual(result["total"], 3)
         self.assertEqual(len(result["data"]), 1)
+        self.assertEqual(
+            result["data"][0]["name"], "Pikachu"
+        )  # fixed to match sorted order
 
     def test_mark_pokemon_captured_sets_correct_state(self):
         self.db.mark_pokemon_captured("Charizard", True)
