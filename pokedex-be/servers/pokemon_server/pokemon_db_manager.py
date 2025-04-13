@@ -86,9 +86,7 @@ class PokemonDBManager(AbstractDBManager):
             result["captured"] = self._is_captured_state.get(result["name"], False)
 
         # Return page
-
         return {
-            # since we are using search index, our fuzzy search may return duplications. set will make sure every result is unique
             "data": results,
             "page": page,
             "page_size": page_size,
