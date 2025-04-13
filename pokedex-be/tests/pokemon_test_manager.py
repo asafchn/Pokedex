@@ -57,7 +57,7 @@ class TestPokemonDBManager(unittest.TestCase):
         self.assertEqual(pokemon["name"], "Pikachu")
         self.assertEqual(
             pokemon["image_path"],
-            ("https://img.pokemondb.net/sprites/home/normal/pikachu.png",),  # <- tuple
+            ("https://img.pokemondb.net/sprites/home/normal/pikachu.png",),
         )
 
         self.assertTrue(pokemon["captured"])
@@ -71,7 +71,7 @@ class TestPokemonDBManager(unittest.TestCase):
         )
 
         numbers = [pokemon["number"] for pokemon in result["data"]]
-        self.assertEqual(numbers, [25, 7, 6])  # descending by number
+        self.assertEqual(numbers, [25, 7, 6])
 
     @patch("servers.pokemon_server.utils.getImagePath")
     def test_get_page_with_pagination(self, mock_get_image_path):
@@ -85,9 +85,7 @@ class TestPokemonDBManager(unittest.TestCase):
         self.assertEqual(result["page_size"], 2)
         self.assertEqual(result["total"], 3)
         self.assertEqual(len(result["data"]), 1)
-        self.assertEqual(
-            result["data"][0]["name"], "Pikachu"
-        )  # fixed to match sorted order
+        self.assertEqual(result["data"][0]["name"], "Pikachu")
 
     def test_mark_pokemon_captured_sets_correct_state(self):
         self.db.mark_pokemon_captured("Charizard", True)
